@@ -1,107 +1,197 @@
-data 1
-
-YS
-UTS
-EL
-Ra
-
-For EL the Prompts which we used further are considering GL values due to confusion if we use a new chat then we can get good accuracy
-
-PDF 1
-
-PDF 2
-
-PDF 3
-
-PDF 4
-
-PDF 5
 
 
-data 2
-YS UTS EL rBAR  Ra n 
+### Data Analysis Summary
 
-n value incorrect
-ys uts n
-n
-n
-n uts ys
+#### Data 1: JSW
 
+**Attributes:**
+- YS
+- UTS
+- EL
+- Ra
 
-data 3
+**Note:** For EL, previous prompts considered GL values due to confusion. Using a new chat can improve accuracy.
 
-YS UTS EL RRVALUE RaMICRO NVALUE
+summarize_Prompt = '''
+Ensure that the extraction is accurate by following these steps:
 
+1. Identify the Correct Column and Row:
+   - Search for the exact column labeled 'Result'.
+   - Extract information strictly from this column and verify its accuracy by cross-referencing the row data.
 
-data 4
+2. Match the Following Formats:
+   - JSW Steel Coil:
+     ```json
+     {
+         "(Coil No. Its Corresponding value)": {"YS": "value", "UTS": "value", "EL": "value", "Ra": "value"},
+         ...
+     }
+     ```
 
-second stage
+Please extract the following information from the attached report strictly from the column labeled 'Result' and nowhere else:
+- Coil No.
+- YS (Mpa)
+- UTS (Mpa) 
+- EL (%)
+- Ra (μm)
 
-data 5
+3. Important Instructions:
+   - **Key Identification:**
+     - Ensure only Coil No. and its corresponding values are extracted. Use the provided example as a guide.
+   - **Accurate Value Extraction:**
+     - Ensure each attribute (YS, UTS, EL, Ra) is extracted from the exact row corresponding to the Coil No.
+     - Rigorously recheck the value of n. If there are any incorrect mappings, change them.
+     - Recheck the values of EL and Ra for accuracy. Ensure the values are from the correct row.
+   - **Avoid Adjacent Column Errors:**
+     - Double-check that values are not mistakenly taken from adjacent columns.
+   - **Verify Attribute Correspondence:**
+     - Confirm that each attribute matches the correct Coil No. and avoid mixing values from different rows.
 
-YP
-TS
-EL
-Ra
+4. Generate an Aesthetically Pleasing JSON:
+   - Format the JSON output for the report with meticulous spacing and relevant units.
+   - For any unavailable data, return the message "Data Unavailable".
 
-May 27th Requirement
-One Prompt  
-Data Unavailable 
-High Accuracy for Mapping
-Refine the Prompts
+Example JSON Formats:
 
-May 28th Results
-All the values are being mapped wrong
-Reason:
-On one side we are tell openai to:
-1. Make it DATA UNAVAILABLE  if a particular attribute is not present
-2. On the other hand we are telling it to Rigorously search for each and every attribute
-    2.1 Because No attribute has DATA UNAVAILABLE it is rigorously mapping any trash value***
-3. We are facing EL GL cross mapping due to combined prompt
-4. It is not recognizing the Coil No. too in other invoices we have Dimensions
-
-
-
-Advantages
-High Accuracy 
-Robust
-
-May 28th New ML Model
-
-ResNet50
-Yolov8
-
-Step 1: Convert PDFs to images.
-
-Step 2: Tabular Data Detection using YOLOv5 & Resnet50:
-
-Using YOLOv5, detect the tabular data, crop the image, and convert it to PDF
-Using Resnet50, detect the tabular data, crop the image, and convert it to PDF
-Compare YOLOv5 accuracy with Resnet50 accuracy
-Compare Original image inputs with YOLOv5 results and Resnet50 results
-
-Step 3: Apply necessary image preprocessing steps.
-
-Step 4: Using Adobe Acrobat OCR, extract the excel format of the cropped converted PDF.
-
-Step 5: Using python code, remove the noise from the extracted excel file and maintain the general structure of the output.
+{
+    "NCS6500037": {"YS": "440 Mpa", "UTS": "510 Mpa", "EL": "24.8%", "Ra": "1.6 μm"},
+    ...
+}
 
 
+---
 
-ResNet50
-Labelling
-Classes
-Train 5 Layers 168 neurons each layer
-Freezing each layer
-adjusting weights according to the output
+#### Data 2: Tata
 
-Yolov8
-Yolov8 High Accuracy nearly 92% accuracte
-High amount of dataset is required nearly 100
+**Attributes:**
+- YS
+- UTS
+- EL
+- rBAR
+- Ra
+- n
 
+**Issues Noted:**
+- Incorrect n values.
+- Mixed-up attributes:
+  - YS, UTS, n
+  - n
+  - n
+  - n, UTS, YS
 
-May29th 
-Explain the Model
-Make specified information regarding the documents
-Switch Cases for specific Company Format
-Each Cases ke liye example 
+---
+
+#### Data 3: Jamshedpur
+
+**Attributes:**
+- YS
+- UTS
+- EL
+- RRVALUE
+- RaMICRO
+- NVALUE
+
+---
+
+#### Data 4: Posco
+
+**Stage:** Second Stage
+
+---
+
+#### Data 5: Hyundai
+
+**Attributes:**
+- YP
+- TS
+- EL
+- Ra
+
+---
+
+### Requirement Review: May 27th
+
+**Goals:**
+- One prompt
+- "Data Unavailable" if an attribute is not present
+- High accuracy in mapping
+- Refine prompts
+
+**Results:**
+- All values were mapped incorrectly.
+
+**Reason:**
+1. Conflict in instructions:
+   - Requirement for "Data Unavailable" if an attribute is not present.
+   - Requirement to rigorously search for each attribute.
+     - This led to mapping any found value because no attribute was marked as "Data Unavailable."
+2. EL and GL cross-mapping due to combined prompt.
+3. Failure to recognize Coil No. in some invoices, leading to dimension errors.
+
+---
+
+### Advantages
+
+- High accuracy
+- Robust performance
+
+---
+
+### New ML Model Implementation: May 28th
+
+**Models:**
+- ResNet50
+- YOLOv8
+
+**Steps:**
+
+1. **Convert PDFs to Images**
+
+2. **Tabular Data Detection Using YOLOv5 & ResNet50:**
+   - Detect tabular data using YOLOv5, crop the image, and convert it to PDF.
+   - Detect tabular data using ResNet50, crop the image, and convert it to PDF.
+   - Compare YOLOv5 accuracy with ResNet50 accuracy.
+   - Compare original image inputs with YOLOv5 results and ResNet50 results.
+
+3. **Image Preprocessing**
+
+4. **OCR Extraction Using Adobe Acrobat:**
+   - Extract the Excel format of the cropped converted PDF.
+
+5. **Python Code for Noise Removal:**
+   - Remove noise from the extracted Excel file.
+   - Maintain the general structure of the output.
+
+---
+
+### ResNet50 Model Details
+
+**Labelling:**
+- Classes
+
+**Training:**
+- 5 layers with 168 neurons each
+- Freezing each layer
+- Adjusting weights according to the output
+
+---
+
+### YOLOv8 Model Details
+
+- High accuracy: Nearly 92%
+- Requires a large dataset: Approximately 100 samples
+
+---
+
+### Considerations for May 29th
+
+**Model Explanation:**
+- Detailed explanation of the models used.
+- Specific information regarding the documents.
+
+**Switch Cases for Specific Company Formats:**
+- Provide examples for each case.
+  
+---
+
+This structured approach ensures clarity in identifying issues, applying models, and refining processes for better accuracy and robustness in data extraction and analysis.

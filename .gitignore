@@ -1,2 +1,6 @@
 azure-sdk-for-python
-venv*.yaml
+venv
+unilm
+table-detection-weights
+detectron2
+data
