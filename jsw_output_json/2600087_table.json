@@ -1,0 +1,116 @@
+{
+    "ColumnHeader1": [
+        "( %",
+        "",
+        "0.0500",
+        "0.0020"
+    ],
+    "ColumnHeader2": [
+        "Mn %",
+        "",
+        "0.70",
+        "0.44"
+    ],
+    "ColumnHeader3": [
+        "S %",
+        "",
+        "0.025",
+        "0.006"
+    ],
+    "ColumnHeader4": [
+        "P %",
+        "",
+        "0.060",
+        "0.040"
+    ],
+    "ColumnHeader5": [
+        "Si %",
+        "",
+        "0.500",
+        "0.005"
+    ],
+    "ColumnHeader6": [
+        "AI %",
+        "0.015",
+        "",
+        ""
+    ],
+    "ColumnHeader7": [
+        "YS (Mpa)",
+        "180",
+        "220",
+        "200"
+    ],
+    "ColumnHeader8": [
+        "(MPa)\nUTS",
+        "300",
+        "360",
+        "325"
+    ],
+    "ColumnHeader9": [
+        "GL (mm)",
+        "80",
+        "",
+        "80"
+    ],
+    "ColumnHeader10": [
+        "EL%",
+        "34.00",
+        "",
+        "39.60"
+    ],
+    "ColumnHeader11": [
+        "R_90",
+        "1.60",
+        "",
+        "2.770"
+    ],
+    "ColumnHeader12": [
+        "N_90",
+        "0.17",
+        "",
+        "0.198"
+    ],
+    "ColumnHeader13": [
+        "BH INX",
+        "30.",
+        "",
+        "62.00"
+    ],
+    "ColumnHeader14": [
+        "Ra um",
+        "0.80",
+        "",
+        "1.01"
+    ],
+    "ColumnHeader15": [
+        "Test\nBend",
+        "",
+        "1.20",
+        "Pass"
+    ],
+    "ColumnHeader16": [
+        "(GSM)\nCoatng",
+        "90",
+        "",
+        "95"
+    ],
+    "ColumnHeader17": [
+        "Fe%\nCoating",
+        "8.0",
+        "",
+        "9.7"
+    ],
+    "ColumnHeader18": [
+        "Top\nCoat",
+        "8.0",
+        "",
+        "9.7"
+    ],
+    "ColumnHeader19": [
+        "Bot\nFe%Coat Fe% JAZ",
+        "8.0",
+        "",
+        "10.6 Y"
+    ]
+}

@@ -1,6 +1,5 @@
 from azure.ai.formrecognizer import DocumentAnalysisClient
 from azure.core.credentials import AzureKeyCredential
-import os
 import PyPDF2
 import time
 import os
@@ -10,9 +9,6 @@ import logging
 import time
 import json
 import csv
-
-# Measure the start time
-overall_start_time = time.time()
 
 def getchunkdata(parsed_data, temp_json_dict):
     c = 0
@@ -317,50 +313,38 @@ def wholeExtraction(pdf_file_path):
     # print(output_number)
     summarize_stack=summarize_stack.replace(" ","")
     summarize_stack=summarize_stack[:5]+" "+summarize_stack[5:]
-    print(summarize_stack)
+    # print(summarize_stack)
+    # Instructor(summarize_stack)
+
+    summarize__message_json = []
 
     #Extraction of data using GPT
-    summarize__message_json = []
-    # 2. For differentiation you can differentiate Mother Coil Number and Coil Number by seeing the number of words, Mother Coil Number has 2 String whereas Coil Number has only one string. For Example, Mother Coil Number= [E955027 NC65330000, DC955027 NC46570000, .....] whereas Coil Number = [NC65330000, NC56389000, NC5896970000] 
-    
-    
     summarize_Prompt = '''
-    Please extract the following information from the attached report strictly from the column labeled 'Result' and nowhere else:
-    - Coil No.
-    - YS (Mpa) (can also be referred to as YP)
-    - UTS (Mpa) (can also be referred to as TS)
-    - EL (%) 
-    - rBAR (treated as RVALUE if "RBAR" is present)
-    - NVALM (can be referred to as 'n')
-    - Ra (μm) (can also be referred to as RaMICROM)
+    Please extract all the data from the table in the attached document and organize it into a dictionary. The keys of the dictionary should be the column headers (the first row of the table), and the values should be lists containing the data from the rows below each header. Follow these detailed instructions:
 
-    Ensure that the extraction is accurate by cross-verifying the output from both the specific row and column where it is extracted before displaying the output.
-
-    Important instructions:
-    1. Do not confuse Heat No. or Mother Coil Number with Coil No. Extract ONLY Coil No. as entries for Coil No.
-    - Example: 
-        - Mother Coil Numbers: [E955027 NC65330000, DC955027 NC46570000, ...]
-        - Coil Numbers: [NC65330000, NC56389000, NC5896970000]
-    - Extract only Coil Number values.
-    2. If a Coil No. is not immediately visible, search rigorously throughout the text to find it.
-    3. Do not mix values from different rows. Each Coil No. should have its own unique set of YS (or YP), UTS (or TS), EL, rBAR, NVALM (or 'n'), and Ra (or RaMICROM) values from the same row.
-    4. Verify that each attribute corresponds exactly to the correct Coil No. and is not mistakenly attributed to another Coil No.
-
-    Generate an aesthetically pleasing JSON representation for a report, adhering to a standardized format. Ensure meticulous spacing and incorporate relevant units when necessary. Return the designated message "Data Unavailable" for any unavailable data in the table.
+    1. **Source**: Extract the data strictly from the table. Do not use any other part of the document.
+    2. **Table Structure**:
+        - Identify the table headers from the first row of the table.
+        - Extract all subsequent rows of data corresponding to each column header.
+    3. **Accuracy**:
+        - Ensure that the extracted values are accurate and correspond to the correct headers.
+        - Cross-verify the output to ensure the data is correctly aligned with the headers.
+    4. **Data Handling**:
+        - If a column contains numerical data, ensure that it is extracted as numbers (integers or floats as applicable).
+        - If a column contains text data, ensure that it is extracted as strings.
+    5. **Format**:
+        - Create a dictionary where the keys are the column headers and the values are lists of the row data below each header.
+        - Generate a JSON representation of the dictionary.
+        - Ensure that the JSON is formatted with proper indentation for readability.
+    6. **Unavailable Data**:
+        - If any column has missing data for certain rows, use `null` to represent missing values in the JSON output.
 
     The JSON format to be strictly followed:
     ```json
     {
-        "(Coil No. Its Corresponding value)": {"YS (Mpa)": "value", "UTS (Mpa)": "value", "EL (%)": "value", "rBAR": "value", "NVALM": "value", "Ra (μm)": "value"},
+        "ColumnHeader1": ["row1_value1", "row2_value1", ...],
+        "ColumnHeader2": ["row1_value2", "row2_value2", ...],
         ...
-    }
-    ```
-
-    Here is an example of the format:
-    ```json
-    {
-        "NC65081000": {"YS (Mpa)": "347", "UTS (Mpa)": "294", "EL (%)": "45", "rBAR": "1.2", "NVALM": "0.95", "Ra (μm)": "67.39"},
-        "NC65082000": {"YS (Mpa)": "364", "UTS (Mpa)": "470", "EL (%)": "80", "rBAR": "1.3", "NVALM": "0.96", "Ra (μm)": "28.10"}
     }
     '''
 
@@ -440,8 +424,8 @@ def json_to_csv(json_file_path, csv_file_path):
 
 # Main function to process the PDF files
 def main():
-    input_folder_path = 'data/data5.0'
-    output_json_folder_path = 'output_json'
+    input_folder_path = '/home/hi-born4/Bristlecone/AI-powered document processing and extraction system/jsw_tables'
+    output_json_folder_path = 'jsw_output_json'
     output_csv_folder_path = 'output_csv'
 
     # Create output directories if they don't exist
@@ -449,7 +433,7 @@ def main():
     os.makedirs(output_csv_folder_path, exist_ok=True)
 
     # Get a list of all PDF files in the input folder
-    pdf_files = [file for file in os.listdir(input_folder_path) if file.lower().endswith('.pdf')]
+    pdf_files = [file for file in os.listdir(input_folder_path) if file.lower().endswith('.jpg')]
 
     for pdf_file in pdf_files:
         input_pdf_path = os.path.join(input_folder_path, pdf_file)

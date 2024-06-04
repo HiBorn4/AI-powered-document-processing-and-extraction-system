@@ -1,0 +1,80 @@
+{
+    "ColumnHeader1": [
+        "$ C %",
+        "",
+        "0.080",
+        "0.002"
+    ],
+    "ColumnHeader2": [
+        "MN %",
+        "",
+        "0.40",
+        "0.08"
+    ],
+    "ColumnHeader3": [
+        "P %",
+        "-",
+        "0.030",
+        "0.011"
+    ],
+    "ColumnHeader4": [
+        "S %",
+        ".",
+        "0.030",
+        "0.007"
+    ],
+    "ColumnHeader5": [
+        "N PPM",
+        "",
+        "70",
+        "27"
+    ],
+    "ColumnHeader6": [
+        "TI %",
+        "",
+        "",
+        "0.051"
+    ],
+    "ColumnHeader7": [
+        "YS MPA",
+        "-",
+        "210",
+        "149"
+    ],
+    "ColumnHeader8": [
+        "UTS MPA",
+        "270",
+        "350",
+        "294"
+    ],
+    "ColumnHeader9": [
+        "EL %",
+        "38",
+        "",
+        "44"
+    ],
+    "ColumnHeader10": [
+        "E\nRVALUNVALM",
+        "1.60",
+        "",
+        "2.55"
+    ],
+    "ColumnHeader11": [
+        "",
+        "0.20",
+        "",
+        "0.25"
+    ],
+    "ColumnHeader12": [
+        "NN\nHRB",
+        "",
+        "",
+        "27"
+    ],
+    "ColumnHeader13": [
+        "Ra MICRO M",
+        "0.80",
+        "50",
+        "1.16"
+    ]
+}

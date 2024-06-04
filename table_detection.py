@@ -1,35 +1,15 @@
-''' 
-Installing Dependencies
-!pip install torch==1.9.0 torchvision==0.10.0 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
-# %cd /content/drive/MyDrive/mahindra/test_certificates/MS-DiT
-# !git clone https://github.com/microsoft/unilm.git
-%cd /content/drive/MyDrive/mahindra/test_certificates/MS-DiT/unilm/dit
-!pip install -r requirements.txt
-!python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.9/index.html
-!pip install shapely
-!pip install timm
-!pip install easyocr
-!pip install opencv-python
-!pip install numpy
-!pip install pandas
-'''
-# Import Dependencies 
 import os
 import cv2
-import sys
-sys.path.append('/home/hi-born4/Bristlecone/AI-powered document processing and extraction system/unilm/dit/object_detection')
-from ditod import add_vit_config
+import numpy as np
+from scipy.ndimage import rotate
 import torch
 from detectron2.config import get_cfg
-from detectron2.utils.visualizer import ColorMode, Visualizer
-from detectron2.data import MetadataCatalog
 from detectron2.engine import DefaultPredictor
-from detectron2.utils.logger import setup_logger
-import numpy as np
-from scipy.ndimage import interpolation as inter
+from detectron2.data import MetadataCatalog
+from ditod import add_vit_config
 
 # Set image and model path
-image_path = '/home/hi-born4/Bristlecone/AI-powered document processing and extraction system/data/JSW_Steel/2360100-01-02.jpg'
+image_folder = '/home/hi-born4/Bristlecone/AI-powered document processing and extraction system/data/JCAPL'
 config_file = '/home/hi-born4/Bristlecone/AI-powered document processing and extraction system/table-detection-weights/maskrcnn/maskrcnn_dit_base.yaml'
 output_dir = 'table_extracted'
 
@@ -39,7 +19,7 @@ if not os.path.exists(output_dir):
 
 def correct_skew(image, delta=1, limit=5):
     def determine_score(arr, angle):
-        data = inter.rotate(arr, angle, reshape=False, order=0)
+        data = rotate(arr, angle, reshape=False, order=0)
         histogram = np.sum(data, axis=1, dtype=float)
         score = np.sum((histogram[1:] - histogram[:-1]) ** 2, dtype=float)
         return histogram, score
@@ -73,16 +53,16 @@ def table_detection(image_path):
         print(f"Error: Failed to read image {image_path}. Check file path or file integrity.")
         return None
     
-    print('Read Image ', image_path)
+    print('Read Image ', image_path) 
     imgname = image_path.split('/')[-1]
     img_name, img_ext = imgname.split('.')
     # Deskew Image
     print('Correct Skew')
     angle, image = correct_skew(img)
     # Save the deskewed image
-    deskewed_image_path = os.path.join(output_dir, f"{img_name}_deskewed.{img_ext}")
-    cv2.imwrite(deskewed_image_path, image)
-    print(f"Deskewed image saved at: {deskewed_image_path}")
+    # deskewed_image_path = os.path.join(output_dir, f"{img_name}_deskewed.{img_ext}")
+    # cv2.imwrite(deskewed_image_path, image)
+    # print(f"Deskewed image saved at: {deskewed_image_path}")
     
     # Table Detection
     print('Table Detection')
@@ -108,5 +88,11 @@ def table_detection(image_path):
     print(f"Table detected image saved at: {table_image_path}")
     return img_table
 
-# Run table detection and save images
-table_img = table_detection(image_path)
+# Iterate over all image files in the folder
+for filename in os.listdir(image_folder):
+    if filename.endswith('.jpg') or filename.endswith('.png') or filename.endswith('.jpeg'):
+        # Construct the full path to the image file
+        image_path = os.path.join(image_folder, filename)
+        
+        # Perform table detection on the current image
+        table_img = table_detection(image_path)
