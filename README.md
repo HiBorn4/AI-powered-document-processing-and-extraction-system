@@ -12,53 +12,6 @@
 
 **Note:** For EL, previous prompts considered GL values due to confusion. Using a new chat can improve accuracy.
 
-summarize_Prompt = '''
-Ensure that the extraction is accurate by following these steps:
-
-1. Identify the Correct Column and Row:
-   - Search for the exact column labeled 'Result'.
-   - Extract information strictly from this column and verify its accuracy by cross-referencing the row data.
-
-2. Match the Following Formats:
-   - JSW Steel Coil:
-     ```json
-     {
-         "(Coil No. Its Corresponding value)": {"YS": "value", "UTS": "value", "EL": "value", "Ra": "value"},
-         ...
-     }
-     ```
-
-Please extract the following information from the attached report strictly from the column labeled 'Result' and nowhere else:
-- Coil No.
-- YS (Mpa)
-- UTS (Mpa) 
-- EL (%)
-- Ra (μm)
-
-3. Important Instructions:
-   - **Key Identification:**
-     - Ensure only Coil No. and its corresponding values are extracted. Use the provided example as a guide.
-   - **Accurate Value Extraction:**
-     - Ensure each attribute (YS, UTS, EL, Ra) is extracted from the exact row corresponding to the Coil No.
-     - Rigorously recheck the value of n. If there are any incorrect mappings, change them.
-     - Recheck the values of EL and Ra for accuracy. Ensure the values are from the correct row.
-   - **Avoid Adjacent Column Errors:**
-     - Double-check that values are not mistakenly taken from adjacent columns.
-   - **Verify Attribute Correspondence:**
-     - Confirm that each attribute matches the correct Coil No. and avoid mixing values from different rows.
-
-4. Generate an Aesthetically Pleasing JSON:
-   - Format the JSON output for the report with meticulous spacing and relevant units.
-   - For any unavailable data, return the message "Data Unavailable".
-
-Example JSON Formats:
-
-{
-    "NCS6500037": {"YS": "440 Mpa", "UTS": "510 Mpa", "EL": "24.8%", "Ra": "1.6 μm"},
-    ...
-}
-
-
 ---
 
 #### Data 2: Tata
@@ -96,6 +49,13 @@ Example JSON Formats:
 #### Data 4: Posco
 
 **Stage:** Second Stage
+
+**Attributes:**
+- YP
+- TS
+- EL
+- Ra
+
 
 ---
 
@@ -199,6 +159,55 @@ This structured approach ensures clarity in identifying issues, applying models,
 
 
 EXTRACT TABLE FROM IMAGE DONE
+
+---------------------------------------------------
+
+summarize_Prompt = '''
+Ensure that the extraction is accurate by following these steps:
+
+1. Identify the Correct Column and Row:
+   - Search for the exact column labeled 'Result'.
+   - Extract information strictly from this column and verify its accuracy by cross-referencing the row data.
+
+2. Match the Following Formats:
+   - JSW Steel Coil:
+     ```json
+     {
+         "(Coil No. Its Corresponding value)": {"YS": "value", "UTS": "value", "EL": "value", "Ra": "value"},
+         ...
+     }
+     ```
+
+Please extract the following information from the attached report strictly from the column labeled 'Result' and nowhere else:
+- Coil No.
+- YS (Mpa)
+- UTS (Mpa) 
+- EL (%)
+- Ra (μm)
+
+3. Important Instructions:
+   - **Key Identification:**
+     - Ensure only Coil No. and its corresponding values are extracted. Use the provided example as a guide.
+   - **Accurate Value Extraction:**
+     - Ensure each attribute (YS, UTS, EL, Ra) is extracted from the exact row corresponding to the Coil No.
+     - Rigorously recheck the value of n. If there are any incorrect mappings, change them.
+     - Recheck the values of EL and Ra for accuracy. Ensure the values are from the correct row.
+   - **Avoid Adjacent Column Errors:**
+     - Double-check that values are not mistakenly taken from adjacent columns.
+   - **Verify Attribute Correspondence:**
+     - Confirm that each attribute matches the correct Coil No. and avoid mixing values from different rows.
+
+4. Generate an Aesthetically Pleasing JSON:
+   - Format the JSON output for the report with meticulous spacing and relevant units.
+   - For any unavailable data, return the message "Data Unavailable".
+
+Example JSON Formats:
+
+{
+    "NCS6500037": {"YS": "440 Mpa", "UTS": "510 Mpa", "EL": "24.8%", "Ra": "1.6 μm"},
+    ...
+}
+
 
 
 

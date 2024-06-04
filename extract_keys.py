@@ -7,16 +7,16 @@ keys_to_search = ["YS", "UTS", "EL", "RBAR", "NVALM", "Ra"]
 
 # Define the replacements for substrings
 substring_replacements = {
-    "YS (Mpa)": "YS",
-    "(MPa)\nUTS": "UTS",
-    "EL%": "EL",
-    "R_90": "RBAR",
-    "N_90": "NVALM",
-    "Raum": "Ra"
+    ".*YS.*": "YS",
+    ".*UTS.*": "UTS",
+    ".*EL": "EL",
+    ".*R_90.*": "RBAR",
+    ".*N_90.*": "NVALM",
+    ".*Ra.*": "Ra"
 }
 
 # Directory containing the JSON files
-input_directory = '/home/hi-born4/Bristlecone/AI-powered document processing and extraction system/jsw_output_json'  # Update this path to your directory
+input_directory = '/home/hi-born4/Bristlecone/AI-powered document processing and extraction system/jsw_output_json/'  # Update this path to your directory
 
 # Directory to save the processed results
 output_directory = os.path.join(input_directory, 'final_output')
@@ -27,13 +27,16 @@ def process_file(file_path):
         data = json.load(file)
         
         # Preprocessing: Replace substrings in keys
-        for key in list(data.keys()):
-            for substring in substring_replacements:
-                pattern = re.compile(substring.replace("%", "."))
-                if pattern.match(key):
-                    new_key = key.replace(substring, substring_replacements[substring])
-                    data[new_key] = data.pop(key)
-        
+        new_data = {}
+        for key in data.keys():
+            new_key = key
+            for pattern, replacement in substring_replacements.items():
+                if re.match(pattern, key):
+                    new_key = replacement
+                    break
+            new_data[new_key] = data[key]
+        data = new_data
+
         # Initialize the result dictionary
         result = {}
         
@@ -56,25 +59,3 @@ def process_all_files(directory):
     for filename in os.listdir(directory):
         if filename.endswith(".json"):
             file_path = os.path.join(directory, filename)
-            result = process_file(file_path)
-            results.append(result)
-    
-    return results
-
-# Save the processed results to a new JSON file
-def save_results(results, output_file):
-    with open(output_file, 'w') as file:
-        json.dump(results, file, indent=4)
-
-# Run the processing and save the results
-def main(input_directory, output_directory):
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
-    
-    results = process_all_files(input_directory)
-    output_file = os.path.join(output_directory, 'processed_results.json')
-    save_results(results, output_file)
-    print(f"Processed results saved to {output_file}")
-
-# Execute the main function
-main(input_directory, output_directory)

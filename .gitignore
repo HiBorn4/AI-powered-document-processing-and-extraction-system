@@ -1,6 +1,7 @@
+.vscode
 azure-sdk-for-python
+data
+detectron2
 venv
 unilm
 table-detection-weights
-detectron2
-data
