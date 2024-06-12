@@ -2,6 +2,7 @@
 azure-sdk-for-python
 data
 detectron2
+mypaddleocr
 venv
 unilm
 table-detection-weights

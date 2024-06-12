@@ -6,20 +6,21 @@ import re
 keys_to_search = ["YS", "UTS", "EL", "RBAR", "NVALM", "Ra"]
 
 # Define the replacements for substrings
-substring_replacements = {
-    ".*YS.*": "YS",
-    ".*UTS.*": "UTS",
-    ".*EL": "EL",
-    ".*R_90.*": "RBAR",
-    ".*N_90.*": "NVALM",
-    ".*Ra.*": "Ra"
+substring_replacements = { 
+    "YS MPA": "YS",
+    "UTS MPA": "UTS",
+    "EL %": "EL",
+    "E\nRVALU": "RBAR",
+    "NVALM": "NVALM",
+    "Ra MICRO M": "Ra"
 }
 
 # Directory containing the JSON files
-input_directory = '/home/hi-born4/Bristlecone/AI-powered document processing and extraction system/jsw_output_json/'  # Update this path to your directory
+input_directory = 'jcpal_output_json/'  # Update this path to your directory
 
 # Directory to save the processed results
 output_directory = os.path.join(input_directory, 'final_output')
+os.makedirs(output_directory, exist_ok=True)  # Create the output directory if it doesn't exist
 
 # Function to process each file
 def process_file(file_path):
@@ -45,11 +46,11 @@ def process_file(file_path):
             if key in data:
                 values = data[key]
                 if len(values) > 2:
-                    result[key] = values[2]  # Use the original key
+                    result[substring_replacements.get(key, key)] = values[len(values)-1]  # Use the replaced key if it exists
                 else:
-                    result[key] = "Data Unavailable"
+                    result[substring_replacements.get(key, key)] = "Data Unavailable"
             else:
-                result[key] = "Data Unavailable"
+                result[substring_replacements.get(key, key)] = "Data Unavailable"
         
         return result
 
@@ -59,3 +60,13 @@ def process_all_files(directory):
     for filename in os.listdir(directory):
         if filename.endswith(".json"):
             file_path = os.path.join(directory, filename)
+            result = process_file(file_path)
+            results.append({filename: result})
+    
+    # Save the results to a single JSON file
+    output_file_path = os.path.join(output_directory, 'processed_results.json')
+    with open(output_file_path, 'w') as output_file:
+        json.dump(results, output_file, indent=4)
+
+# Run the processing function
+process_all_files(input_directory)

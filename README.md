@@ -351,3 +351,115 @@ summarize_Prompt = '''
     }
     ```
     '''
+
+------------------------------------------
+
+summarize_Prompt = '''    
+    Ensure that the extraction is accurate by following these steps:
+
+    1. Identify the Correct Column and Row:
+    - Search for the exact column labeled 'Result'.
+    - Extract information strictly from this column and verify its accuracy by cross-referencing the row data.
+
+    2. Match the Following Formats:
+    - Maharashtra Steel Product:
+        ```json
+        {
+            "(Product No. Its Corresponding value)": {"YP": "value", "TS": "value", "EL": "value", "Ra": "value"},
+            ...
+        }
+        ```
+    - Hyundai Steel Dimension:
+        ```json
+        {
+            "(Dimension. Its Corresponding value)": {"YP": "value", "TS": "value", "EL": "value", "Ra": "value"},
+            ...
+        }
+        ```
+    - Tata Steel Mother Coil:
+        ```json
+        {
+            "(Mother Coil Its Corresponding value)": {"YS": "value", "UTS": "value", "EL": "value", "rBAR": "value", "n": "value", "Ra": "value"},
+            ...
+        }
+        ```
+    - Jamshedpur Steel Coil:
+        ```json
+        {
+            "(Coil No. Its Corresponding value)": {"YS": "value", "UTS": "value", "EL": "value", "rVALUE": "value", "NVALM": "value", "RA MICROM": "value"},
+            ...
+        }
+        ```
+    - JSW Steel Coil:
+        ```json
+        {
+            "(Coil No. Its Corresponding value)": {"YS": "value", "UTS": "value", "EL": "value", "Ra": "value"},
+            ...
+        }
+        ```
+        
+    Please extract the following information from the attached report strictly from the column labeled 'Result' and nowhere else:
+    - Coil No.
+    - YS (Mpa) (can also be referred to as YP)
+    - UTS (Mpa) (can also be referred to as TS)
+    - EL (%)
+    - rBAR (treated as RVALUE if "RBAR" is present)
+    - NVALM (can be referred to as 'n')
+    - Ra (μm) (can also be referred to as RaMICROM)
+
+
+    3. Important Instructions:
+    - Key Identification:
+        - If a Coil No., Mother Coil, Dimension, or Product Number is not immediately visible, conduct a thorough search throughout the text to locate it.
+    - Accurate Value Extraction:
+        - Ensure each attribute (YS/YP, UTS/TS, EL, rBAR/RVALUE, NVALM/n, Ra/RaMICROM) is extracted from the exact row corresponding to the Coil No., Mother Coil, Dimension, or Product Number.
+    - Avoid Adjacent Column Errors:
+        - Double-check that values are not mistakenly taken from adjacent columns.
+    - Verify Attribute Correspondence:
+        - Confirm that each attribute matches the correct Coil No. and avoid mixing values from different rows.
+
+    4. Generate an Aesthetically Pleasing JSON:
+    - Format the JSON output for the report with meticulous spacing and relevant units.
+    - For any unavailable data, return the message "Data Unavailable".
+
+    Example JSON Formats:
+    - Maharashtra Steel Product:
+    ```json
+    {
+        "12345": {"YP": "450", "TS": "500", "EL": "25", "Ra": "1.5"},
+        ...
+    }
+    ```
+    - Hyundai Steel Dimension:
+    ```json
+    {
+        "67890": {"YP": "420", "TS": "480", "EL": "22", "Ra": "1.2"},
+        ...
+    }
+    ```
+    - Tata Steel Mother Coil:
+    ```json
+    {
+        "23456": {"YS": "430", "UTS": "490", "EL": "23", "rBAR": "1.4", "n": "0.22", "Ra": "1.3"},
+        ...
+    }
+    ```
+    - Jamshedpur Steel Coil:
+    ```json
+    {
+        "78901": {"YS": "410", "UTS": "470", "EL": "20", "rVALUE": "1.3", "NVALM": "0.20", "RA MICROM": "1.1"},
+        ...
+    }
+    ```
+    - JSW Steel Coil:
+    ```json
+    {
+        "34567": {"YS": "440", "UTS": "510", "EL": "24", "Ra": "1.6"},
+        ...
+    }
+    ```
+
+    By adhering to these guidelines, you will ensure a high level of accuracy and consistency in the extracted data.
+
+    Thank you for your meticulous attention to detail in this task.
+    '''
