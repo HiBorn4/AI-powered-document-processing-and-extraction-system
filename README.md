@@ -13,10 +13,10 @@
     <td><img src="/public/test2.png" width="100%"><br><center>📄 Raw Document</center></td>
   </tr>
   <tr>
-    <td><img src="/public/table.png" width="100%"><br><center>✂️ Cropped Table</center></td>
+    <td><img src="/public/table.jpg" width="100%"><br><center>✂️ Cropped Table</center></td>
   </tr>
   <tr>
-    <td><img src="/public/final.png" width="100%"><br><center>🧠 KPIs</center></td>
+    <td><img src="/public/final.jpg" width="100%"><br><center>🧠 KPIs</center></td>
   </tr>
 </table>
 
